@@ -47,7 +47,7 @@ alarms = []
 for row in rows:
         alarms.append(row[0])
 
-if DEBUG = True
+if DEBUG:
         for alarm in alarms:
                 print "Mac address %s has an active alarm" % alarm
 
@@ -62,11 +62,14 @@ for ip in sys.argv:
                 check_model = str(subprocess.check_output(['snmpget', '-v2c', '-ccaution', ip, 'sysDescr.0'], stderr=devnull))
                 if "UBR10K" in check_model:
                         ubr_ips.append(ip)
+		else:
+			raise Exception()
         except:
-                print "%s is not a valid UBR10K IP address or hostname" % ip
-                pass
+		if ip not in sys.argv[0]:
+                	print "%s is not a valid UBR10K IP address or hostname" % ip
+                	pass
 
-if DEBUG = True
+if DEBUG:
         for ip in ubr_ips:
                 name = str(subprocess.check_output(['snmpget', '-v2c', '-ccaution', ip, 'sysName.0'])).rsplit(None, 1)[-1]
                 print "Device %s(%s) is ready for processing" % (name, ip)
