@@ -11,7 +11,7 @@
 #+-----------------------------------------------------------------------+
 #| Date: 2016-04-15                                                      |
 #+-----------------------------------------------------------------------+
-#| Version: 1.1.0                                                        |
+#| Version: 1.1.2                                                        |
 #+-----------------------------------------------------------------------+
 
 ####################################################
@@ -101,16 +101,27 @@ def ipabusealert(ip):
         for mac in counter_mac:
                 if counter_mac[mac] >= 10:
                         message = "Customer mac address %s has %s entries in the arp table" % (mac, counter_mac[mac])
-                        subprocess.call(['zensendevent', '-d', name, '-y', mac, '-p', mac, '-s', 'Info', '-c', '/Cable Plant/IP Abuse', '-k', mac, message])
+                        subprocess.call(['zensendevent', '-d', name, '-y', mac, '-p', mac, '-s', 'Warning', '-c', '/Cable Plant/IP Abuse', '-k', mac, message])
                 elif mac in alarms:
                         message = "Customer mac address %s has %s entries in the arp table" % (mac, counter_mac[mac])
                         subprocess.call(['zensendevent', '-d', name, '-y', mac, '-p', mac, '-s', 'Clear', '-c', '/Cable Plant/IP Abuse', '-k', mac, message])
+                        alarms.remove(mac)
+        for mac in alarms:
+                if mac not in counter_mac:
+                        message = "Customer mac address %s has 0 entries in the arp table" % mac
+                        subprocess.call(['zensendevent', '-d', name, '-y', mac, '-p', mac, '-s', 'Clear', '-c', '/Cable Plant/IP Abuse', '-k', mac, message])
+
 
 ####################################################
 #     Call threaded function for each device       #
 ####################################################
 
+threads = []
+
 for ip in ubr_ips:
         t = Thread(target=ipabusealert, args=(ip,))
+        threads.append(t)
         t.start()
+
+for t in threads:
         t.join()
