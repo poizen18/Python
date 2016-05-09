@@ -30,6 +30,7 @@ if str.isdigit(sys.argv[1]):
   vote_count = int(sys.argv[1])
 else:
   print "Please enter a numeric value"
+  exit()
 
 for vote in xrange(vote_count):
   br=mechanize.Browser()
