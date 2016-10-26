@@ -3,12 +3,14 @@
 import commands
 import socket
 import sys
+import ssl
 
 server = "irc.wyldbrian.com"   
 channel = "#smalltalk"
 botnick = "wyldbot"
 
-irc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+irc_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+irc = ssl.wrap_socket(irc_sock)
 irc.connect((server, 6667))
 irc.send("USER "+ botnick +" "+ botnick +" "+ botnick +" :Annoying little bot\n")
 irc.send("NICK "+ botnick +"\n")
