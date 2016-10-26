@@ -49,8 +49,8 @@ while 1:
 	text=irc.recv(2040)
 	if text.find('PING') != -1:
 		irc.send('PONG ' + text.split() [1] + '\r\n')
-	if text.find('++') !=-1:
-		karma_up = (text.split("++")[0]).split(":")[2]
+	if text.find('++') !=-1 and text.find(channel) !=-1:
+		karma_up = (text.split("++")[0]).split(":")[2].rsplit(None,1)[-1]
 		if karma_up in karma_val:
 			idx = karma_val.index(karma_up)
 			num = karma_num[idx]
@@ -58,8 +58,8 @@ while 1:
 		elif karma_up not in karma_val:
 			karma_val.append(karma_up)
 			karma_num.append(1)
-	if text.find('--') !=-1:
-		karma_down = (text.split("--")[0]).split(":")[2]
+	if text.find('--') !=-1 and text.find(channel) !=-1:
+		karma_down = (text.split("--")[0]).split(":")[2].rsplit(None,1)[-1]
 		if karma_down in karma_val:
 			idx = karma_val.index(karma_down)
 			num = karma_num[idx]
@@ -67,7 +67,7 @@ while 1:
 		elif karma_down not in karma_val:
 			karma_val.append(karma_down)
 			karma_num.append(-1)
-	if text.find('!rank') !=-1:
+	if text.find('!rank') !=-1 and text.find(channel) !=-1:
 		rank = (text.split(':!rank')[1]).strip()
 		if rank in karma_val:
 			idx = karma_val.index(rank)

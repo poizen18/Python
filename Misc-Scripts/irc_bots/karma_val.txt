@@ -1,1 +1,1 @@
-["python", "spaulding", "Karmabot", "json", "global", "Kris", "sixr", "wyldbrian", "ivie", "sciencebot", "pickle"]
+["python", "spaulding", "Karmabot", "json", "global", "Kris", "sixr", "wyldbrian", "ivie", "sciencebot", "pickle", "Donald", "test", "recorded", "arrays", "text.find"]
