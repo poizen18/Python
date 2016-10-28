@@ -65,7 +65,10 @@ def karmahelp():
 	irc.send('PRIVMSG ' + channel + ' :' + "     !top or !bottom = show the top or bottom 5 items by Karma" + '\r\n')	
 
 def timedhelp():
-	threading.Timer(3600,karmahelp).start()
+	threading.Timer(7200,timedhelp).start()
+	karmahelp()
+
+timedhelp()
 
 while 1:
 	text=irc.recv(2040)
