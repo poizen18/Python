@@ -57,12 +57,18 @@ irc.send("USER "+ botnick +" "+ botnick +" "+ botnick +" :How much Karma do you 
 irc.send("NICK "+ botnick +"\n")
 irc.send("JOIN "+ channel +"\n")
 
+
 while 1:
 	text=irc.recv(2040)
 	if text.find('PING') != -1:
 		irc.send('PONG ' + text.split() [1] + '\r\n')
 	if text.find('++') !=-1 and text.find(channel) !=-1:
-		karma_up = (text.split("++")[0]).split(":")[2].rsplit(None,1)[-1]
+		try:
+			karma_up = (text.split("++")[0]).split(":")[2].rsplit(None,1)[-1]
+		except:
+			message = "Who would you like to give Karma to? (e.g. Karmabot++)"
+			irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
+			karma_up = 'null'
 		if karma_up in karma_val:
 			idx = karma_val.index(karma_up)
 			num = karma_num[idx]
@@ -71,7 +77,12 @@ while 1:
 			karma_val.append(karma_up)
 			karma_num.append(1)
 	if text.find('--') !=-1 and text.find(channel) !=-1:
-		karma_down = (text.split("--")[0]).split(":")[2].rsplit(None,1)[-1]
+		try:
+			karma_down = (text.split("--")[0]).split(":")[2].rsplit(None,1)[-1]
+		except:
+			message = "Who would you like to take Karma away from? (e.g. Karmabot--)"
+			irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
+			karma_down = 'null'
 		if karma_down in karma_val:
 			idx = karma_val.index(karma_down)
 			num = karma_num[idx]
@@ -89,3 +100,16 @@ while 1:
 		elif rank not in karma_val:
 			message = (rank + " doesn't have any karma yet!")
 			irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
+	if text.find('!top') !=-1 and text.find(channel) !=-1:
+		top_results = sorted(zip(karma_num,karma_val), reverse=True)[:5]
+		irc.send('PRIVMSG ' + channel + ' :' + "## TOP 5 KARMA RECIPIENTS ##" + '\r\n')
+		for (x,y) in top_results:
+			message = (y + ": " + str(x))
+			irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
+	if text.find('!bottom') !=-1 and text.find(channel) !=-1:
+		top_results = sorted(zip(karma_num,karma_val), reverse=False)[:5]
+		irc.send('PRIVMSG ' + channel + ' :' + "## BOTTOM 5 KARMA RECIPIENTS ##" + '\r\n')
+		for (x,y) in top_results:
+			message = (y + ": " + str(x))
+			irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
+
