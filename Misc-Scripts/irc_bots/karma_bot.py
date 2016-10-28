@@ -115,7 +115,7 @@ while 1:
 			irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
 	elif text.find('!help') !=-1 and text.find(channel) !=-1:
 		time.sleep(1.5)
-		irc.send('PRIVMSG ' + channel + ' :' + "##################################KARMA USAGE##################################" + '\r\n')
+		irc.send('PRIVMSG ' + channel + ' :' + "     ############################KARMABOT USAGE############################" + '\r\n')
 		irc.send('PRIVMSG ' + channel + ' :' + "     ++ or -- = give or take karma from whatever you want (e.g. Karmabot++)" + '\r\n')
 		irc.send('PRIVMSG ' + channel + ' :' + "     !rank = show the rank of a particular thing (e.g. !rank Karmabot)" + '\r\n')
 		irc.send('PRIVMSG ' + channel + ' :' + "     !top or !bottom = show the top or bottom 5 items by Karma" + '\r\n')
