@@ -11,12 +11,13 @@
 #+-----------------------------------------------------------------------+
 #| Date: 2016-10-26                                                      |
 #+-----------------------------------------------------------------------+
-#| Version: 1.0.3                                                        |
+#| Version: 1.0.6                                                        |
 #+-----------------------------------------------------------------------+
 
 import socket
 import ssl
 import json
+import time
 import threading
 
 server = "localhost"
@@ -62,11 +63,11 @@ while 1:
 	text=irc.recv(2040)
 	if text.find('PING') != -1:
 		irc.send('PONG ' + text.split() [1] + '\r\n')
-	if text.find('++') !=-1 and text.find(channel) !=-1:
+	elif text.find('++') !=-1 and text.find(channel) !=-1:
 		try:
 			karma_up = (text.split("++")[0]).split(":")[2].rsplit(None,1)[-1]
 		except:
-			message = "Who would you like to give Karma to? (e.g. Karmabot++)"
+			message = "What would you like to give Karma to? (e.g. Karmabot++)"
 			irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
 			karma_up = 'null'
 		if karma_up in karma_val:
@@ -76,11 +77,11 @@ while 1:
 		elif karma_up not in karma_val:
 			karma_val.append(karma_up)
 			karma_num.append(1)
-	if text.find('--') !=-1 and text.find(channel) !=-1:
+	elif text.find('--') !=-1 and text.find(channel) !=-1:
 		try:
 			karma_down = (text.split("--")[0]).split(":")[2].rsplit(None,1)[-1]
 		except:
-			message = "Who would you like to take Karma away from? (e.g. Karmabot--)"
+			message = "What would you like to take Karma away from? (e.g. Karmabot--)"
 			irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
 			karma_down = 'null'
 		if karma_down in karma_val:
@@ -90,7 +91,7 @@ while 1:
 		elif karma_down not in karma_val:
 			karma_val.append(karma_down)
 			karma_num.append(-1)
-	if text.find('!rank') !=-1 and text.find(channel) !=-1:
+	elif text.find('!rank') !=-1 and text.find(channel) !=-1:
 		rank = (text.split(':!rank')[1]).strip()
 		if rank in karma_val:
 			idx = karma_val.index(rank)
@@ -100,16 +101,25 @@ while 1:
 		elif rank not in karma_val:
 			message = (rank + " doesn't have any karma yet!")
 			irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
-	if text.find('!top') !=-1 and text.find(channel) !=-1:
+	elif text.find('!top') !=-1 and text.find(channel) !=-1:
 		top_results = sorted(zip(karma_num,karma_val), reverse=True)[:5]
 		irc.send('PRIVMSG ' + channel + ' :' + "## TOP 5 KARMA RECIPIENTS ##" + '\r\n')
 		for (x,y) in top_results:
 			message = (y + ": " + str(x))
 			irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
-	if text.find('!bottom') !=-1 and text.find(channel) !=-1:
+	elif text.find('!bottom') !=-1 and text.find(channel) !=-1:
 		top_results = sorted(zip(karma_num,karma_val), reverse=False)[:5]
 		irc.send('PRIVMSG ' + channel + ' :' + "## BOTTOM 5 KARMA RECIPIENTS ##" + '\r\n')
 		for (x,y) in top_results:
 			message = (y + ": " + str(x))
 			irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
-
+	elif text.find('!help') !=-1 and text.find(channel) !=-1:
+		time.sleep(2)
+		irc.send('PRIVMSG ' + channel + ' :' + "####################### KARMABOT USAGE ##########################" + '\r\n')
+		irc.send('PRIVMSG ' + channel + ' :' + "++ = give karma to whatever you want (e.g. Karmabot++)" + '\r\n')
+		irc.send('PRIVMSG ' + channel + ' :' + "-- = take karma away from whatever you want (e.g. Karmabot--)" + '\r\n')
+		irc.send('PRIVMSG ' + channel + ' :' + "!rank = show the rank of a particular thing (e.g. !rank Karmabot)" + '\r\n')
+		irc.send('PRIVMSG ' + channel + ' :' + "!help = display the text your reading right now" + '\r\n')
+		irc.send('PRIVMSG ' + channel + ' :' + "!top = show the top 5 items by Karma" + '\r\n')
+		irc.send('PRIVMSG ' + channel + ' :' + "!bottom = show the bottom 5 items by Karma " + '\r\n')
+		irc.send('PRIVMSG ' + channel + ' :' + "####################### KARMABOT USAGE ##########################" + '\r\n')
