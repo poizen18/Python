@@ -11,7 +11,7 @@
 #+-----------------------------------------------------------------------+
 #| Date: 2016-10-26                                                      |
 #+-----------------------------------------------------------------------+
-#| Version: 1.0.6                                                        |
+#| Version: 1.0.7                                                        |
 #+-----------------------------------------------------------------------+
 
 import socket
@@ -58,6 +58,14 @@ irc.send("USER "+ botnick +" "+ botnick +" "+ botnick +" :How much Karma do you 
 irc.send("NICK "+ botnick +"\n")
 irc.send("JOIN "+ channel +"\n")
 
+def karmahelp():
+	irc.send('PRIVMSG ' + channel + ' :' + "     ############################KARMABOT USAGE############################" + '\r\n')
+	irc.send('PRIVMSG ' + channel + ' :' + "     ++ or -- = give or take karma from whatever you want (e.g. Karmabot++)" + '\r\n')
+	irc.send('PRIVMSG ' + channel + ' :' + "     !rank = show the rank of a particular thing (e.g. !rank Karmabot)" + '\r\n')
+	irc.send('PRIVMSG ' + channel + ' :' + "     !top or !bottom = show the top or bottom 5 items by Karma" + '\r\n')	
+
+def timedhelp():
+	threading.Timer(3600,karmahelp).start()
 
 while 1:
 	text=irc.recv(2040)
@@ -115,7 +123,4 @@ while 1:
 			irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
 	elif text.find('!help') !=-1 and text.find(channel) !=-1:
 		time.sleep(.5)
-		irc.send('PRIVMSG ' + channel + ' :' + "     ############################KARMABOT USAGE############################" + '\r\n')
-		irc.send('PRIVMSG ' + channel + ' :' + "     ++ or -- = give or take karma from whatever you want (e.g. Karmabot++)" + '\r\n')
-		irc.send('PRIVMSG ' + channel + ' :' + "     !rank = show the rank of a particular thing (e.g. !rank Karmabot)" + '\r\n')
-		irc.send('PRIVMSG ' + channel + ' :' + "     !top or !bottom = show the top or bottom 5 items by Karma" + '\r\n')
+		karmahelp()
