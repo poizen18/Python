@@ -64,12 +64,6 @@ def karmahelp():
 	irc.send('PRIVMSG ' + channel + ' :' + "     !rank = show the rank of a particular thing (e.g. !rank Karmabot)" + '\r\n')
 	irc.send('PRIVMSG ' + channel + ' :' + "     !top or !bottom = show the top or bottom 5 items by Karma" + '\r\n')	
 
-def timedhelp():
-	threading.Timer(7200,timedhelp).start()
-	karmahelp()
-
-timedhelp()
-
 while 1:
 	text=irc.recv(2040)
 	if text.find('PING') != -1:
