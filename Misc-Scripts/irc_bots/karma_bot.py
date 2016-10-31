@@ -18,11 +18,11 @@
 #             Import necessary modules             #
 ####################################################
 
-import socket
 import ssl
 import sys
-import json
 import time
+import pickle
+import socket
 import threading
 
 ####################################################
@@ -43,10 +43,10 @@ karma_num = []
 def karmaload():
 	global karma_val
 	global karma_num
-	load_val = open("karma_val.txt")
-	load_num = open("karma_num.txt")
-	karma_val = json.loads(load_val.read())
-	karma_num = json.loads(load_num.read())
+	load_val = open("karma_val.p")
+	load_num = open("karma_num.p")
+	karma_val = pickle.load(load_val)
+	karma_num = pickle.load(load_num)
 	load_val.close()
 	load_num.close()
 
@@ -54,17 +54,17 @@ def karmasave():
 	threading.Timer(30,karmasave).start()
 	global karma_val
 	global karma_num
-	save_val = file("karma_val.txt", "w")
-	save_num = file("karma_num.txt", "w")
-	save_val.write(json.dumps(karma_val))
-	save_num.write(json.dumps(karma_num))
+	save_val = file("karma_val.p", "w")
+	save_num = file("karma_num.p", "w")
+	pickle.dump(karma_val,save_val)
+	pickle.dump(karma_num,save_num)
 	save_val.close()
 	save_num.close()
 
 try:
 	karmaload()
 except:
-	print  "Karmaload failed, exiting"
+	print "Karmaload failed, exiting"
 	sys.exit()
 else:
 	karmasave()
