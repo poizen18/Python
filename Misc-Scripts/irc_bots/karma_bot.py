@@ -20,6 +20,7 @@
 
 import socket
 import ssl
+import sys
 import json
 import time
 import threading
@@ -60,8 +61,13 @@ def karmasave():
 	save_val.close()
 	save_num.close()
 
-karmaload()
-karmasave()
+try:
+	karmaload()
+except:
+	print  "Karmaload failed, exiting"
+	sys.exit()
+else:
+	karmasave()
 
 ####################################################
 #            Connect to IRC server (SSL)           #
