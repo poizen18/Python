@@ -42,12 +42,12 @@ karma_num = []
 def karmaload():
 	global karma_val
 	global karma_num
-	save_val = open("karma_val.txt")
-	save_num = open("karma_num.txt")
-	karma_val = json.loads(save_val.read())
-	karma_num = json.loads(save_num.read())
-	save_val.close()
-	save_num.close()
+	load_val = open("karma_val.txt")
+	load_num = open("karma_num.txt")
+	karma_val = json.loads(load_val.read())
+	karma_num = json.loads(load_num.read())
+	load_val.close()
+	load_num.close()
 
 def karmasave():
 	threading.Timer(30,karmasave).start()
