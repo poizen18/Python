@@ -9,10 +9,14 @@
 #+-----------------------------------------------------------------------+
 #| Authors: Brian Spaulding                                              |
 #+-----------------------------------------------------------------------+
-#| Date: 2016-10-26                                                      |
+#| Date: 2016-10-31                                                      |
 #+-----------------------------------------------------------------------+
-#| Version: 1.1.0                                                        |
+#| Version: 1.1.1                                                        |
 #+-----------------------------------------------------------------------+
+
+####################################################
+#             Import necessary modules             #
+####################################################
 
 import socket
 import ssl
@@ -20,9 +24,17 @@ import json
 import time
 import threading
 
+####################################################
+#             Set IRC connection values            #
+####################################################
+
 server = "localhost"
 channel = "#smalltalk"
 botnick = "Karmabot"
+
+####################################################
+#  Initialize arrays and create load/save process  #
+####################################################
 
 karma_val = []
 karma_num = []
@@ -51,12 +63,20 @@ def karmasave():
 karmaload()
 karmasave()
 
+####################################################
+#            Connect to IRC server (SSL)           #
+####################################################
+
 irc_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 irc = ssl.wrap_socket(irc_sock)
 irc.connect((server, 6667))
 irc.send("USER "+ botnick +" "+ botnick +" "+ botnick +" :How much Karma do you have?\n")
 irc.send("NICK "+ botnick +"\n")
 irc.send("JOIN "+ channel +"\n")
+
+####################################################
+#          Build karma functions for IRC           #
+####################################################
 
 def karmaup():
 	try:
@@ -118,6 +138,10 @@ def karmahelp():
 	irc.send('PRIVMSG ' + channel + ' :' + "     ++ or -- = give or take karma from whatever you want (e.g. Karmabot++)" + '\r\n')
 	irc.send('PRIVMSG ' + channel + ' :' + "     !rank = show the rank of a particular thing (e.g. !rank Karmabot)" + '\r\n')
 	irc.send('PRIVMSG ' + channel + ' :' + "     !top or !bottom = show the top or bottom 5 items by Karma" + '\r\n')	
+
+####################################################
+# Watch IRC chat for key values and run functions  #
+####################################################	
 
 while 1:
 	text=irc.recv(2040)
