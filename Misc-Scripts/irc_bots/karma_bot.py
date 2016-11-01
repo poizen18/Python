@@ -11,7 +11,7 @@
 #+-----------------------------------------------------------------------+
 #| Date: 2016-10-31                                                      |
 #+-----------------------------------------------------------------------+
-#| Version: 1.1.1                                                        |
+#| Version: 1.1.2                                                        |
 #+-----------------------------------------------------------------------+
 
 ####################################################
@@ -70,15 +70,18 @@ else:
 	karmasave()
 
 ####################################################
-#            Connect to IRC server (SSL)           #
+#            Build IRC connect function            #
 ####################################################
 
-irc_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-irc = ssl.wrap_socket(irc_sock)
-irc.connect((server, 6667))
-irc.send("USER "+ botnick +" "+ botnick +" "+ botnick +" :How much Karma do you have?\n")
-irc.send("NICK "+ botnick +"\n")
-irc.send("JOIN "+ channel +"\n")
+def connect():
+	global irc_sock
+	global irc
+	irc_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	irc = ssl.wrap_socket(irc_sock)
+	irc.connect((server, 6667))
+	irc.send("USER "+ botnick +" "+ botnick +" "+ botnick +" :How much Karma do you have?\n")
+	irc.send("NICK "+ botnick +"\n")
+	irc.send("JOIN "+ channel +"\n")
 
 ####################################################
 #          Build karma functions for IRC           #
@@ -149,8 +152,10 @@ def karmahelp():
 # Watch IRC chat for key values and run functions  #
 ####################################################	
 
+connect()
+
 while 1:
-	text=irc.recv(2040)
+	text=irc.recv(1024)
 	if text.find('PING') != -1:
 		irc.send('PONG ' + text.split() [1] + '\r\n')
 	elif text.find('++') !=-1 and text.find(channel) !=-1:
@@ -166,3 +171,11 @@ while 1:
 	elif text.find('!help') !=-1 and text.find(channel) !=-1:
 		time.sleep(.5)
 		karmahelp()
+	elif len(text) == 0:
+		while 1:
+			try:
+				time.sleep(5)
+				connect()
+			except:
+				continue
+			break
