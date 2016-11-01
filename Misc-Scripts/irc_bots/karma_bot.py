@@ -178,6 +178,4 @@ while 1:
 				connect()
 			except:
 				continue
-			else:
-				sys.exit()
 			break
