@@ -90,10 +90,10 @@ def connect():
 def karmaup():
 	try:
 		karma_up = (text.split("++")[0]).split(":")[2].rsplit(None,1)[-1]
-	except:
+	except IndexError:
 		message = "What would you like to give Karma to? (e.g. Karmabot++)"
 		irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
-		karma_up = 'null'
+		return
 	if karma_up in karma_val:
 		idx = karma_val.index(karma_up)
 		num = karma_num[idx]
@@ -105,10 +105,10 @@ def karmaup():
 def karmadown():
 	try:
 		karma_down = (text.split("--")[0]).split(":")[2].rsplit(None,1)[-1]
-	except:
+	except IndexError:
 		message = "What would you like to take Karma away from? (e.g. Karmabot--)"
 		irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
-		karma_down = 'null'
+		return
 	if karma_down in karma_val:
 		idx = karma_val.index(karma_down)
 		num = karma_num[idx]
@@ -118,7 +118,12 @@ def karmadown():
 		karma_num.append(-1)
 		
 def karmarank():
-	rank = (text.split(':!rank')[1]).strip()
+	try:
+		rank = (text.split(':!rank')[1]).strip()
+	except IndexError:
+		message = "What would you like to check the rank of? (e.g. !rank Karmabot)"
+		irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
+		return
 	if rank in karma_val:
 		idx = karma_val.index(rank)
 		num = karma_num[idx]
