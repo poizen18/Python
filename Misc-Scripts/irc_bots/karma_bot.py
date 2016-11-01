@@ -174,8 +174,9 @@ while 1:
 	elif len(text) == 0:
 		while 1:
 			try:
+				time.sleep(300)
 				connect()
-			except socket.error:
+			except:
 				continue
 			else:
 				sys.exit()
