@@ -11,7 +11,7 @@
 #+-----------------------------------------------------------------------+
 #| Date: 2016-10-31                                                      |
 #+-----------------------------------------------------------------------+
-#| Version: 1.1.2                                                        |
+#| Version: 1.1.3                                                        |
 #+-----------------------------------------------------------------------+
 
 ####################################################
@@ -23,6 +23,7 @@ import sys
 import json
 import time
 import socket
+import logging
 import threading
 
 ####################################################
@@ -32,6 +33,15 @@ import threading
 server = "localhost"
 channel = "#smalltalk"
 botnick = "Karmabot"
+
+####################################################
+#              Set logging parameters              #
+####################################################
+
+logfile = '/var/log/karmabot.log'
+loglevel = logging.INFO
+logformat = '%(asctime)s %(message)s'
+logging.basicConfig(filename=logfile,format=logformat,level=loglevel)
 
 ####################################################
 #  Initialize arrays and create load/save process  #
@@ -98,9 +108,15 @@ def karmaup():
 		idx = karma_val.index(karma_up)
 		num = karma_num[idx]
 		karma_num[idx] = int(num) + 1
+		user = (text.split("@")[0]).split("!")[1]
+		logmsg = user + " gave karma to " + karma_up + " (++)"
+		logging.info(logmsg)
 	elif karma_up not in karma_val:
 		karma_val.append(karma_up)
 		karma_num.append(1)
+		user = (text.split("@")[0]).split("!")[1]
+		logmsg = user + " gave karma to " + karma_up + " (++)"
+		logging.info(logmsg)
 		
 def karmadown():
 	try:
@@ -113,9 +129,15 @@ def karmadown():
 		idx = karma_val.index(karma_down)
 		num = karma_num[idx]
 		karma_num[idx] = int(num) - 1
+		user = (text.split("@")[0]).split("!")[1]
+		logmsg = user + " took karma away from " + karma_down + " (--)"
+		logging.info(logmsg)
 	elif karma_down not in karma_val:
 		karma_val.append(karma_down)
 		karma_num.append(-1)
+		user = (text.split("@")[0]).split("!")[1]
+		logmsg = user + " took karma away from " + karma_down + " (--)"
+		logging.info(logmsg)
 		
 def karmarank():
 	try:
