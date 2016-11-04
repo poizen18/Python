@@ -40,7 +40,7 @@ botnick = "Karmabot"
 
 logfile = '/var/log/karmabot.log'
 loglevel = logging.INFO
-logformat = '%(asctime)s %(Levelname)s:%(message)s'
+logformat = '%(asctime)s - %(levelname)s - %(message)s'
 logging.basicConfig(filename=logfile,format=logformat,level=loglevel)
 
 ####################################################
@@ -108,13 +108,13 @@ def karmaup():
 		idx = karma_val.index(karma_up)
 		num = karma_num[idx]
 		karma_num[idx] = int(num) + 1
-		user = (text.split("@")[0]).split("!")[1]
+		user = (text.split(":")[1]).split("!")[0]
 		logmsg = user + " gave karma to " + karma_up + " (++)"
 		logging.info(logmsg)
 	elif karma_up not in karma_val:
 		karma_val.append(karma_up)
 		karma_num.append(1)
-		user = (text.split("@")[0]).split("!")[1]
+		user = (text.split(":")[1]).split("!")[0]
 		logmsg = user + " gave karma to " + karma_up + " (++)"
 		logging.info(logmsg)
 		
@@ -129,13 +129,13 @@ def karmadown():
 		idx = karma_val.index(karma_down)
 		num = karma_num[idx]
 		karma_num[idx] = int(num) - 1
-		user = (text.split("@")[0]).split("!")[1]
+		user = (text.split(":")[1]).split("!")[0]
 		logmsg = user + " took karma away from " + karma_down + " (--)"
 		logging.info(logmsg)
 	elif karma_down not in karma_val:
 		karma_val.append(karma_down)
 		karma_num.append(-1)
-		user = (text.split("@")[0]).split("!")[1]
+		user = (text.split(":")[1]).split("!")[0]
 		logmsg = user + " took karma away from " + karma_down + " (--)"
 		logging.info(logmsg)
 		
