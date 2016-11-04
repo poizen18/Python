@@ -40,7 +40,7 @@ botnick = "Karmabot"
 
 logfile = '/var/log/karmabot.log'
 loglevel = logging.INFO
-logformat = '%(asctime)s %(message)s'
+logformat = '%(asctime)s %(Levelname)s:%(message)s'
 logging.basicConfig(filename=logfile,format=logformat,level=loglevel)
 
 ####################################################
@@ -74,7 +74,7 @@ def karmasave():
 try:
 	karmaload()
 except:
-	print "Karmaload failed, exiting"
+	logging.CRITICAL('Karmaload failed, exiting')
 	sys.exit()
 else:
 	karmasave()
