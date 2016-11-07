@@ -1,6 +1,6 @@
 # CMTS Monitoring Scripts
 
-# Offline Modems (offline_modems.py)
+## Offline Modems (offline_modems.py)
 
 ## How it works:
 This script will connect to multiple UBRs (Cisco UBR10Ks in this case) and pull cable modem stats for alerting purposes. 
@@ -9,7 +9,7 @@ This script will connect to multiple UBRs (Cisco UBR10Ks in this case) and pull 
 - The percentage of offline modems based on the total is calculated and alerted on based on percentage
 - If percentage thresholds are broken, and alarm is generated and sent to Zenoss
 
-# UBR Arp Check (ubr10k_arp_check.py)
+## UBR Arp Check (ubr10k_arp_check.py)
 
 ## How it works:
 This script will connect to multiple UBRs (Cisco UBR10Ks in this case) and pull the arp table for review.
