@@ -1,6 +1,6 @@
-# Karmabot
+## Karmabot
 
-How it works:
+# How it works:
 This script will connect to your IRC server (localhost by default) and respond to various prompts
 - Typing ++ in IRC will give karma to an item (e.g. Karmabot++)
 - Typing -- in IRC will take karma away from an item (e.g. Karmabot--)
