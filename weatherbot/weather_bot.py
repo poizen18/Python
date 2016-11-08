@@ -31,7 +31,7 @@ import urllib2
 
 server = "localhost"
 channel = "#smalltalk"
-botnick = "Weatherbot"
+botnick = "weatherbot"
 
 ####################################################
 #            Build IRC connect function            #
@@ -55,7 +55,7 @@ def connect():
 def weather():
         try:
 		city = (text.split("!weather")[1]).split(",")[0].lstrip().replace(" ","_")
-		state = (text.split("!weather")[1]).split(",")[1].strip()
+		state = (text.split("!weather")[1]).split(",")[1].strip().replace(" ","_")
         except IndexError:
                 message = "What city's weather would you like to check? (e.g. !weather Bend,OR)"
                 irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
