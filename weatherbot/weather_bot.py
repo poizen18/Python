@@ -11,7 +11,7 @@
 #+-----------------------------------------------------------------------+
 #| Date: 2016-11-7                                                       |
 #+-----------------------------------------------------------------------+
-#| Version: 1.0                                                          |
+#| Version: 1.1                                                          |
 #+-----------------------------------------------------------------------+
 
 ####################################################
@@ -43,7 +43,7 @@ def connect():
         irc_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         irc = ssl.wrap_socket(irc_sock)
         irc.connect((server, 6667))
-        irc.send("USER "+ botnick +" "+ botnick +" "+ botnick +" :How much Karma do you have?\n")
+        irc.send("USER "+ botnick +" "+ botnick +" "+ botnick +" :Check the weather for any city.\n")
         irc.send("NICK "+ botnick +"\n")
         irc.send("JOIN "+ channel +"\n")
 
@@ -54,21 +54,26 @@ def connect():
 
 def weather():
         try:
-		city = (text.split("!weather")[1]).split(",")[0].strip()
+		city = (text.split("!weather")[1]).split(",")[0].lstrip().replace(" ","_")
 		state = (text.split("!weather")[1]).split(",")[1].strip()
         except IndexError:
                 message = "What city's weather would you like to check? (e.g. !weather Bend,OR)"
                 irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
                 return
-	f = urllib2.urlopen('http://api.wunderground.com/api/0c6e61e8fe3d5798/geolookup/conditions/q/%s/%s.json' % (state,city))
-	json_string = f.read()
+	api = urllib2.urlopen('http://api.wunderground.com/api/0c6e61e8fe3d5798/geolookup/conditions/q/%s/%s.json' % (state,city))
+	json_string = api.read()
 	parsed_json = json.loads(json_string)
-	location = parsed_json['location']['city']
-	temp_f = parsed_json['current_observation']['temp_f']
-	message = "Current temperature in %s is: %s" %(location, temp_f)
+	try:
+		temp = parsed_json['current_observation']['temperature_string']
+		location = parsed_json['location']['city']
+		condition = parsed_json['current_observation']['weather']
+	except:
+		message = ("What city's weather would you like to check? (e.g. !weather Bend,OR)")
+		irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
+		return
+	message = "The weather in %s is currently showing %s with a temperature of %s" %(location,condition,temp) 
 	irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
-	print message
-	f.close()
+	api.close()
 
 
 ####################################################
@@ -91,7 +96,3 @@ while 1:
                         except:
                                 continue
                         break
-
-
-
-
