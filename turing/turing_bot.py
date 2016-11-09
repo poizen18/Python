@@ -209,14 +209,14 @@ def weathercheck():
 		condition = weather_dict['current_observation']['weather']
 	except KeyError:
 		if "keynotfound" in weather_output:
-			message = ("Rate limit reached, please try again in a few seconds.")
+			message = ("Weather API rate limit reached, please try again in a few seconds.")
 			irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
 			logging.warning(message)
 			return
 		elif "querynotfound" in weather_output:
-			message = ("No results found for %s" % city)
+			message = ("No weather results found for %s,%s" %(city,state))
 			irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
-			loggin.warning(message)
+			logging.warning(message)
 			return
 		else:
 			return
