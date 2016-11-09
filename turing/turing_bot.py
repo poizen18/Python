@@ -211,10 +211,14 @@ def weathercheck():
 		if "keynotfound" in weather_output:
 			message = ("Rate limit reached, please try again in a few seconds.")
 			irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
+			logging.warning(message)
 			return
 		elif "querynotfound" in weather_output:
 			message = ("No results found for %s" % city)
 			irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
+			loggin.warning(message)
+			return
+		else:
 			return
 	message = "The weather in %s is currently showing %s with a temperature of %s" %(location,condition,temp) 
 	irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
