@@ -37,13 +37,13 @@ import threading
 
 server = "localhost"
 channel = "#smalltalk"
-botnick = "turing"
+botnick = "Turing"
 
 ####################################################
 #              Set logging parameters              #
 ####################################################
 
-logfile = '/var/log/karmabot.log'
+logfile = '/var/log/turing.log'
 loglevel = logging.INFO
 logformat = '%(asctime)s - %(levelname)s - %(message)s'
 logging.basicConfig(filename=logfile,format=logformat,level=loglevel)
@@ -79,7 +79,7 @@ def karmasave():
 try:
 	karmaload()
 except:
-	logging.CRITICAL('Karmaload failed, exiting')
+	logging.critical('Karmaload failed, exiting')
 	sys.exit()
 else:
 	karmasave()
@@ -202,6 +202,7 @@ def quakeload():
 	load_quakes.close()
 
 def quakesave():
+	threading.Timer(30,quakesave).start()
 	global quake_id
 	save_quakes = file("quake_id.json", "w")
 	save_quakes.write(json.dumps(quake_id))
@@ -210,7 +211,7 @@ def quakesave():
 try:
 	quakeload()
 except:
-	logging.CRITICAL('Quakeload failed, exiting')
+	logging.critical('Quakeload failed, exiting')
 	sys.exit()
 else:
 	quakesave()
@@ -222,14 +223,14 @@ def quakecheck():
 		quake_call = urllib2.urlopen(quake_feed)
 	except:
 		message = "Caught exception trying to connect to usgs api"
-		logging.warning(message)
+		logging.CRITICAL(message)
 		return
 	quake_output = quake_call.read()
 	quake_call.close
 	quake_dict = json.loads(quake_output)
 	global quake_id
 	for quake in quake_dict['features']:
-		if quake['id'] not in quakelist:
+		if quake['id'] not in quake_id:
 			quake_id.append(quake['id'])
 			mag = quake['properties']['mag']
 			location = quake['properties']['place']
@@ -238,8 +239,9 @@ def quakecheck():
 				irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
 			except:
 				message = "Caught exception trying to post quake info to IRC"
-				logging.warning(message)
-			logging.info(message)
+				logging.critical(message)
+				return
+			logging.warning(message)
 			
 ####################################################
 #              Build IRC help function             #
