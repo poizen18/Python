@@ -193,7 +193,27 @@ def weathercheck():
 #   Build and run function for earthquake checks   #
 ####################################################	
 
-quakelist = []
+quake_id = []
+
+def quakeload():
+	global quake_id
+	load_quakes = open("quake_id.json")
+	quake_id = json.loads(load_quakes.read())
+	load_quakes.close()
+
+def quakesave():
+	global quake_id
+	save_quakes = file("quake_id.json", "w")
+	save_quakes.write(json.dumps(quake_id))
+	save_quakes.close()
+
+try:
+	quakeload()
+except:
+	logging.CRITICAL('Quakeload failed, exiting')
+	sys.exit()
+else:
+	quakesave()
 
 def quakecheck():
 	threading.Timer(900,quakecheck).start()
@@ -207,14 +227,13 @@ def quakecheck():
 	quake_output = quake_call.read()
 	quake_call.close
 	quake_dict = json.loads(quake_output)
-	global quakelist
+	global quake_id
 	for quake in quake_dict['features']:
 		if quake['id'] not in quakelist:
-			quakelist.append(quake['id'])
+			quake_id.append(quake['id'])
 			mag = quake['properties']['mag']
 			location = quake['properties']['place']
-			details = quake['properties']['url']
-			message = "%s magnitude earthquake detected %s - %s" %(mag,location,details)
+			message = "%s magnitude earthquake detected %s" %(mag,location)
 			try:
 				irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
 			except:
@@ -222,6 +241,17 @@ def quakecheck():
 				logging.warning(message)
 			logging.info(message)
 			
+####################################################
+#              Build IRC help function             #
+####################################################
+
+def help():
+	irc.send('PRIVMSG ' + channel + ' :' + "     ##############################TURING USAGE##############################" + '\r\n')
+	irc.send('PRIVMSG ' + channel + ' :' + "     !weather = check weather for a specific location (e.g. !weather Bend,OR)" + '\r\n')
+	irc.send('PRIVMSG ' + channel + ' :' + "     ++ or -- = give or take karma from whatever you want (e.g. Karmabot++)" + '\r\n')
+	irc.send('PRIVMSG ' + channel + ' :' + "     !rank = show the rank of a particular thing (e.g. !rank Karmabot)" + '\r\n')
+	irc.send('PRIVMSG ' + channel + ' :' + "     !top or !bottom = show the top or bottom 5 items by Karma" + '\r\n')
+
 ####################################################
 #            Build IRC connect function            #
 ####################################################
@@ -232,7 +262,7 @@ def connect():
 	irc_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	irc = ssl.wrap_socket(irc_sock)
 	irc.connect((server, 6667))
-	irc.send("USER "+ botnick +" "+ botnick +" "+ botnick +" :A computer would deserve to be called intelligent if it could deceive a human into believing that it was human.\n")
+	irc.send("USER "+ botnick +" "+ botnick +" "+ botnick +" :Machines take me by surprise with great frequency.\n")
 	irc.send("NICK "+ botnick +"\n")
 	irc.send("JOIN "+ channel +"\n")
 
