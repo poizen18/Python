@@ -84,7 +84,32 @@ except:
 else:
 	karmasave()
 
+####################################################
+#        Create earthquake save/load process       #
+####################################################
 
+quake_id = []
+
+def quakeload():
+	global quake_id
+	load_quakes = open("quake_id.json")
+	quake_id = json.loads(load_quakes.read())
+	load_quakes.close()
+
+def quakesave():
+	threading.Timer(30,quakesave).start()
+	global quake_id
+	save_quakes = file("quake_id.json", "w")
+	save_quakes.write(json.dumps(quake_id))
+	save_quakes.close()
+
+try:
+	quakeload()
+except:
+	logging.critical('Quakeload failed, exiting')
+	sys.exit()
+else:
+	quakesave()
 
 ####################################################
 #          Build karma functions for IRC           #
@@ -190,31 +215,8 @@ def weathercheck():
 	api.close()
 
 ####################################################
-#   Build and run function for earthquake checks   #
+#       Build function for earthquake checks       #
 ####################################################	
-
-quake_id = []
-
-def quakeload():
-	global quake_id
-	load_quakes = open("quake_id.json")
-	quake_id = json.loads(load_quakes.read())
-	load_quakes.close()
-
-def quakesave():
-	threading.Timer(30,quakesave).start()
-	global quake_id
-	save_quakes = file("quake_id.json", "w")
-	save_quakes.write(json.dumps(quake_id))
-	save_quakes.close()
-
-try:
-	quakeload()
-except:
-	logging.critical('Quakeload failed, exiting')
-	sys.exit()
-else:
-	quakesave()
 
 def quakecheck():
 	threading.Timer(900,quakecheck).start()
