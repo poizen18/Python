@@ -15,4 +15,4 @@ This script will connect to your IRC server (localhost by default) and respond t
 - This script will check every 15 minutes for earthquakes around the world and report them in IRC.
 - The script uses json load/dump to periodically store existing karma in a file and load it on startup.
 
-## [The script is named after Alan Turing]
+### [The script is named after Alan Turing]
