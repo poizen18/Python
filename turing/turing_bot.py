@@ -228,7 +228,7 @@ def weathercheck():
 ####################################################	
 
 def quakecheck():
-	threading.Timer(900,quakecheck).start()
+	threading.Timer(120,quakecheck).start()
 	try:
 		quake_call = urllib2.urlopen('http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_hour.geojson', timeout = 1)
 	except:

@@ -32,7 +32,7 @@ import threading
 
 server = "localhost"
 channel = "#smalltalk"
-botnick = "Karmabot"
+botnick = "karmabot"
 
 ####################################################
 #              Set logging parameters              #
