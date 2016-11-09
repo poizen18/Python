@@ -260,8 +260,8 @@ def quakecheck():
 def help():
 	irc.send('PRIVMSG ' + channel + ' :' + "     ##############################TURING USAGE##############################" + '\r\n')
 	irc.send('PRIVMSG ' + channel + ' :' + "     !weather = check weather for a specific location (e.g. !weather Bend,OR)" + '\r\n')
-	irc.send('PRIVMSG ' + channel + ' :' + "     ++ or -- = give or take karma from whatever you want (e.g. Karmabot++)" + '\r\n')
-	irc.send('PRIVMSG ' + channel + ' :' + "     !rank = show the rank of a particular thing (e.g. !rank Karmabot)" + '\r\n')
+	irc.send('PRIVMSG ' + channel + ' :' + "     ++ or -- = give or take karma from whatever you want (e.g. Turing++)" + '\r\n')
+	irc.send('PRIVMSG ' + channel + ' :' + "     !rank = show the rank of a particular thing (e.g. !rank Turing--)" + '\r\n')
 	irc.send('PRIVMSG ' + channel + ' :' + "     !top or !bottom = show the top or bottom 5 items by Karma" + '\r\n')
 
 ####################################################
