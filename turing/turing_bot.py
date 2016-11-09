@@ -199,20 +199,25 @@ def weathercheck():
 		message = "What city's weather would you like to check? (e.g. !weather Bend,OR)"
 		irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
 		return
-	api = urllib2.urlopen('http://api.wunderground.com/api/0c6e61e8fe3d5798/geolookup/conditions/q/%s/%s.json' % (state,city))
-	json_string = api.read()
-	parsed_json = json.loads(json_string)
+	weather_call = urllib2.urlopen('http://api.wunderground.com/api/0c6e61e8fe3d5798/geolookup/conditions/q/%s/%s.json' %(state,city), timeout = 1)
+	weather_output = weather_call.read()
+	weather_call.close()
+	weather_dict = json.loads(weather_output)
 	try:
-		temp = parsed_json['current_observation']['temperature_string']
-		location = parsed_json['location']['city']
-		condition = parsed_json['current_observation']['weather']
-	except:
-		message = ("What city's weather would you like to check? (e.g. !weather Bend,OR)")
-		irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
-		return
+		temp = weather_dict['current_observation']['temperature_string']
+		location = weather_dict['location']['city']
+		condition = weather_dict['current_observation']['weather']
+	except KeyError:
+		if "keynotfound" in weather_output:
+			message = ("Rate limit reached, please try again in a few seconds.")
+			irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
+			return
+		elif "querynotfound" in weather_output:
+			message = ("No results found for %s" % city)
+			irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
+			return
 	message = "The weather in %s is currently showing %s with a temperature of %s" %(location,condition,temp) 
 	irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
-	api.close()
 
 ####################################################
 #       Build function for earthquake checks       #
@@ -220,9 +225,8 @@ def weathercheck():
 
 def quakecheck():
 	threading.Timer(900,quakecheck).start()
-	quake_feed = 'http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_hour.geojson'
 	try:
-		quake_call = urllib2.urlopen(quake_feed)
+		quake_call = urllib2.urlopen('http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_hour.geojson', timeout = 1)
 	except:
 		message = "Caught exception trying to connect to usgs api"
 		logging.CRITICAL(message)
