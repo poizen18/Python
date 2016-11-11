@@ -200,7 +200,7 @@ def weathercheck():
 		irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
 		return
 	try:
-		weather_call = urllib2.urlopen('http://api.wunderground.com/api/0c6e61e8fe3d5798/geolookup/conditions/q/%s/%s.json' %(state,city), timeout = 1)
+		weather_call = urllib2.urlopen('http://api.wunderground.com/api/54e69a68a1bc427e/geolookup/conditions/q/%s/%s.json' %(state,city), timeout = 1)
 	except (socket.timeout,urllib2.URLError):
 		message = ("Weather API timed out, please try again in a few seconds.")
 		irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
