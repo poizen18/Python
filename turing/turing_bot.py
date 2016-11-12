@@ -200,7 +200,7 @@ def weathercheck():
 		irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
 		return
 	try:
-		weather_call = urllib2.urlopen('http://api.wunderground.com/api/54e69a68a1bc427e/geolookup/conditions/q/%s/%s.json' %(state,city), timeout = 1)
+		weather_call = urllib2.urlopen('http://api.wunderground.com/api/54e69a68a1bc427e/geolookup/conditions/q/%s/%s.json' %(state,city), timeout = 2)
 	except (socket.timeout,urllib2.URLError):
 		message = ("Weather API timed out, please try again in a few seconds.")
 		irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
@@ -236,7 +236,7 @@ def weathercheck():
 def quakecheck():
 	threading.Timer(120,quakecheck).start()
 	try:
-		quake_call = urllib2.urlopen('http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_hour.geojson', timeout = 1)
+		quake_call = urllib2.urlopen('http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_hour.geojson', timeout = 2)
 	except:
 		message = "Caught exception trying to connect to usgs api"
 		logging.CRITICAL(message)
