@@ -236,7 +236,7 @@ def weathercheck():
 def quakecheck():
 	threading.Timer(120,quakecheck).start()
 	try:
-		quake_call = urllib2.urlopen('http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_hour.geojson', timeout = 2)
+		quake_call = urllib2.urlopen('http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_hour.geojson', timeout = 2)
 	except:
 		message = "Caught exception trying to connect to usgs api"
 		logging.CRITICAL(message)
