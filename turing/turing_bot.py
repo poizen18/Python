@@ -219,15 +219,15 @@ def weathercheck():
 			irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
 			logging.warning(message)
 			return
-		elif "querynotfound" in weather_output:
-			message = ("No weather results found for %s,%s" %(city,state))
+		elif "querynotfound" in weather_output or "conditions" in weather_output:
+			message = ("No weather results found for %s,%s" %(city.replace("_"," "),state.replace("_"," ")))
 			irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
 			logging.warning(message)
 			return
 		else:
 			message = ("Unknown API error occured, please try again later")
 			irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
-			lossing.warning(message)
+			logging.warning(message)
 			return
 	message = "The weather in %s is currently showing %s with a temperature of %s" %(location,condition,temp) 
 	irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
