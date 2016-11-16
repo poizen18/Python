@@ -225,6 +225,9 @@ def weathercheck():
 			logging.warning(message)
 			return
 		else:
+			message = ("Unknown API error occured, please try again later")
+			irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
+			lossing.warning(message)
 			return
 	message = "The weather in %s is currently showing %s with a temperature of %s" %(location,condition,temp) 
 	irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
