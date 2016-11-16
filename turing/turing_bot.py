@@ -214,7 +214,7 @@ def weathercheck():
 		location = weather_dict['location']['city']
 		condition = weather_dict['current_observation']['weather']
 	except KeyError:
-		if "keynotfound" in weather_output:
+		if "keynotfound" in weather_output or "missingkey" in weather_output:
 			message = ("Weather API rate limit reached, please try again in a few seconds.")
 			irc.send('PRIVMSG ' + channel + ' :' + message + '\r\n')
 			logging.warning(message)
